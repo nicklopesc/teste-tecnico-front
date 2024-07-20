@@ -1,5 +1,4 @@
-
-import { createStore } from 'vuex';
+import { createStore } from "vuex";
 
 export default createStore({
   state: {
@@ -12,13 +11,17 @@ export default createStore({
   },
   actions: {
     async fetchUsers({ commit }) {
-      const response = await fetch('https://reqres.in/api/users');
-      const data = await response.json();
-      console.log("DATA", data)
-      commit('setUsers', data.data);
+      try {
+        const response = await fetch("https://reqres.in/api/users");
+        if (!response.ok) throw new Error("Erro na resposta da rede");
+        const data = await response.json();
+        commit("setUsers", data.data);
+      } catch (error) {
+        console.error("Falha ao buscar usuários:", error);
+      }
     },
   },
   getters: {
-    users: state => state.users,
+    users: (state) => state.users,
   },
 });
