@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-btn @click="openDialog" color="#038c7f" class="add-user-btn"
-      >Adicionar Usuário</v-btn
-    >
+    <v-btn @click="openDialog" color="#038c7f" class="add-user-btn">
+      Adicionar Usuário
+    </v-btn>
 
     <v-dialog v-model="dialogVisible" max-width="600px">
       <v-card>
@@ -46,12 +46,17 @@
 <script setup>
 import { ref } from "vue";
 import Buttons from "../../../components/Buttons.vue";
+import ActionAlert from "../../../components/ActionAlert.vue";
 
 const dialogVisible = ref(false);
 const newUser = ref({
   name: "",
   job: "",
 });
+const alertVisible = ref(false);
+const alertSeverity = ref("success");
+const alertMessage = ref("");
+const alertErrorDetails = ref("");
 
 const openDialog = () => {
   dialogVisible.value = true;
@@ -75,13 +80,25 @@ const createUser = async () => {
     if (response.ok) {
       const data = await response.json();
       console.log("Usuário criado:", data);
+      alertSeverity.value = "success";
+      alertMessage.value = "Usuário criado com sucesso!";
+      alertErrorDetails.value = ""; // Pode ser deixado em branco
       dialogVisible.value = false;
       clearForm();
     } else {
-      console.error("Failed to create user:", response.statusText);
+      const errorData = await response.json();
+      alertSeverity.value = "error";
+      alertMessage.value = "Falha ao criar usuário.";
+      alertErrorDetails.value =
+        errorData.error || "Detalhes do erro não disponíveis.";
     }
   } catch (error) {
+    alertSeverity.value = "error";
+    alertMessage.value = "Erro ao criar usuário.";
+    alertErrorDetails.value = error.message;
     console.error("Error:", error);
+  } finally {
+    alertVisible.value = true;
   }
 };
 
