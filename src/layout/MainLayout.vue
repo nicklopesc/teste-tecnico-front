@@ -1,9 +1,11 @@
 <template>
   <v-app>
+    <!-- Navigation Drawer -->
     <v-navigation-drawer
       app
       v-model="drawer"
-      :permanent="permanent"
+      :permanent="isPermanent"
+      :temporary="isTemporary"
       class="custom-background"
     >
       <v-list class="flex-column">
@@ -42,10 +44,13 @@
       </v-list>
     </v-navigation-drawer>
 
+    <!-- App Bar with Menu Button -->
     <v-app-bar app color="#038c7f">
+      <v-app-bar-nav-icon @click="toggleDrawer" />
       <v-toolbar-title class="toolbar-title">Olá, User!</v-toolbar-title>
     </v-app-bar>
 
+    <!-- Main Content -->
     <v-main>
       <v-container fluid>
         <router-view />
@@ -55,14 +60,16 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
   name: "MainLayout",
   setup() {
     const drawer = ref(true);
-    const permanent = ref(true);
+    const isPermanent = computed(() => window.innerWidth >= 960); // Permanent on large screens
+    const isTemporary = computed(() => window.innerWidth < 960); // Temporary on small screens
+
     const router = useRouter();
 
     const items = [
@@ -71,7 +78,7 @@ export default {
     ];
 
     const navigate = (route) => {
-      drawer.value = permanent.value;
+      drawer.value = false; // Close drawer on item click (mobile)
       router.push(route);
     };
 
@@ -80,18 +87,31 @@ export default {
       router.push("/login");
     };
 
+    const toggleDrawer = () => {
+      drawer.value = !drawer.value; // Toggle drawer visibility
+    };
+
+    // Watch for window resize events
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 960) {
+        drawer.value = true; // Show drawer on large screens
+      }
+    });
+
     return {
       drawer,
-      permanent,
+      isPermanent,
+      isTemporary,
       items,
       navigate,
       logout,
+      toggleDrawer,
     };
   },
 };
 </script>
 
-<style>
+<style scoped>
 .custom-background {
   background: linear-gradient(to bottom, #038c7f, #038c7f, #1c1c1c) !important;
 }
