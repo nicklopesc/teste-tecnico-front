@@ -1,14 +1,21 @@
 <template>
-  <div>
+  <v-container fluid>
     <v-row>
-      <v-col><UserPieChart /></v-col>
-      <v-col><UserBarChart /></v-col>
+      <!-- Use v-col with appropriate props for responsiveness -->
+      <v-col cols="12" md="6">
+        <UserPieChart />
+      </v-col>
+      <v-col cols="12" md="6">
+        <UserBarChart />
+      </v-col>
+      <v-col cols="12" md="6">
+        <WeeklyUserRegistrations />
+      </v-col>
+      <v-col cols="12" md="6">
+        <ConversionFunnel />
+      </v-col>
     </v-row>
-    <v-row>
-      <v-col><WeeklyUserRegistrations /></v-col>
-      <v-col><ConversionFunnel /></v-col>
-    </v-row>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -28,4 +35,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+/* Ensure proper spacing and layout for mobile devices */
+@media (max-width: 600px) {
+  .v-col {
+    margin-bottom: 16px; /* Adjust spacing as needed */
+  }
+}
+</style>
