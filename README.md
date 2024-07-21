@@ -1,60 +1,73 @@
 # Teste técnico para desenvolvedor(a) frond-end (Vue js)
 
-## Instruções do teste
+Este projeto é uma mini-aplicação desenvolvida para gerenciamento de usuários. A aplicação oferece uma visão detalhada dos usuários por meio de um dashboard, permitindo criar, editar, excluir e buscar usuários com facilidade. Além disso, o dashboard fornece gráficos e indicadores para uma análise mais profunda das informações dos usuários.
 
-Você deverá criar um `fork` deste projeto, e desenvolver em cima do seu fork. Utilize o README principal do seu repositório para descrever como foi resolver o teste, as decisões que você tomou, como organizou e estruturou seu código, e, especialmente, para fornecer as instruções de execução do projeto. Lembre-se de que o primeiro a rodar seu projeto será um programador backend da nossa equipe. Se você conseguir explicar claramente para ele como fazer isso, já estará começando com o pé direito!
+## Tecnologias Utilizadas
 
-Acreditamos que este desafio pode ser resolvido em cerca de 40 horas de codificação (5 dias corridos).
+- Vue.js 3: Framework JavaScript para construção de interfaces de usuário.
+- Vuetify: Biblioteca de componentes para Vue.js, utilizada para a interface.
+- Vite: Ferramenta de build rápida para Vue.js.
+- ECharts: Biblioteca para criação de gráficos e dashboards.
+- Axios: Cliente HTTP para chamadas à API.
 
-## O desafio
+## Instalação e Configuração
 
-Você irá construir uma mini-aplicação para controle de usuários. A aplicação deverá permitir a criação, edição, exclusão e busca de usuários. Além disso, esperamos que você torne o CRUD mais robusto, contendo:
-- Autenticação
-- Validação nos formulários
-- Paginação
-- Filtro de busca
+1 - Abra o vs code
+2 - No canto esquerdo superior clique em Terminal
 
-Utilize a api **https://reqres.in/** para consumir os endpoints necessários.
+Em seguida, no terminal digite:
 
-Por fim, precisamos apresentar essas informações de forma intuitiva e dinâmica para o usuário. Esperamos que você desenvolva um dashboard contendo alguns indicadores e gráficos (fique livre para escolher as informações que serão usadas no dash)
+3 - Clone o repositório com o comando
+git clone https://github.com/nicklopesc/teste-tecnico-front.git
 
-#### Observações
-- É interessante o código ter tratamento de erros e feedbacks visuais para o usuário.
-- Para os gráficos recomendamos que utilize o apex charts, porém sinta-se livre para usar outra lib de sua escolha
+4 - Navegue até o diretório do projeto com:
+cd teste-tecnico-front
 
-## O que nós esperamos do seu teste
-- Ver na solução a utilização do Vue Js na versão 3
-- Ver a utilização de dependency managers (npm, webpack)
-- Um HTML escrito da maneira mais semântica possível (HTML5/5.1)
-- Um código bem escrito (Modularização, Nomenclaturas, Padronização, Reutilização, etc)
-- Mobile first e layout responsivo
-- Testes unitários
+5 - Instale as dependências executando:
+npm install
 
-### O que nos impressionaria
-- Alguma metodologia para definição e organização do seu código CSS/Tailwind
-- Testes de aceitação
-- Aplicação de animações em css quando possível e tome cuidado com a performance
-- Ver o código rodando live (Heroku, Firebase Hosting, Bucket estático S3, etc )
+6 - Execute o projeto com:
+npm run dev.
 
-### O que nós não gostaríamos
+7 - Abra o projeto no navegador acessando http://localhost:3000
 
-- Descobrir que não foi você quem fez seu teste
-- Ver commits grandes, sem muita explicação nas mensagens
-- Não conseguir rodar o projeto localmente (lembre-se de detalhar o passo-a-passo para a configuração do mesmo)
+## Acesso ao login
 
-## O que avaliaremos de seu teste
+Usuário : user
+Senha: password
 
-- Histórico de commits do git
-- As instruções de como rodar o projeto
-- Organização, semântica, estrutura, legibilidade, manutenibilidade do seu código
-- Alcance dos objetivos propostos
-- Adaptação mobile (layout responsivo)
-- Componentização e extensibilidade dos componentes Javascript
+## Estrutura do Projeto:
 
-## Processo de submissão
+- src/: Código-fonte da aplicação.
+  components/: Componentes reutilizáveis.
+  views/: Páginas da aplicação.
+  views/components: Componentes referentes as páginas principais da aplicação
+  store/: Gerenciamento de estado (utilizando o vuex).
+  router/: Configuração de rotas.
 
-Ao finalizar, responda o email que lhe foi enviado contendo o link do seu repositório
+## Funcionalidades
 
-Qualquer dúvida em relação ao desafio, responderemos por e-mail.
+- CRUD de Usuários: Permite a criação, edição, exclusão e busca de usuários.
+- Autenticação: Simulação de autenticação para acessar as funcionalidades.
+- Validação de Formulários: Validação de dados dos formulários de criação e edição de usuários.
+- Paginação e Filtro: Paginação e filtros disponíveis na lista de usuários.
+- Dashboard: Inclui gráficos e indicadores para visualização de dados dos usuários.
 
-Bom trabalho!
+## Como Usar
+
+1 - Criar um Novo Usuário:
+Navegue até o menu Usuários.
+Clique no botão “Adicionar Usuário”.
+Preencha o formulário com as informações necessárias e clique em “Confirmar”.
+
+2 - Editar um Usuário:
+Localize o usuário desejado na tabela e clique no ícone de edição (icone em formato de lápis).
+Atualize as informações e salve as alterações.
+Observação: Para verificar a funcionalidade de erro, mantenha as informações do usuário e altere apenas o email.
+
+2 - Excluir um Usuário:
+Na tabela de usuários, clique no ícone de exclusão (Icone em formato de lixeira) ao lado do usuário que deseja remover.
+Confirme a exclusão na caixa de diálogo que aparece.
+
+4 - Buscar e Filtrar Usuários:
+Utilize o campo de busca e os filtros disponíveis para encontrar usuários específicos rapidamente.
