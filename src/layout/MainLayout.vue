@@ -3,12 +3,13 @@
     <v-navigation-drawer
       app
       v-model="drawer"
-      :permanent="permanent"
+      :permanent="isPermanent"
+      :temporary="!isPermanent"
       class="custom-background"
     >
       <v-list class="flex-column">
         <div class="logo">
-          <span class="text-h3">User</span>
+          <span class="text-h3">LOGO</span>
         </div>
 
         <v-divider></v-divider>
@@ -43,6 +44,7 @@
     </v-navigation-drawer>
 
     <v-app-bar app color="#038c7f">
+      <v-app-bar-nav-icon @click="toggleDrawer" />
       <v-toolbar-title class="toolbar-title">Olá, User!</v-toolbar-title>
     </v-app-bar>
 
@@ -55,14 +57,15 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
   name: "MainLayout",
   setup() {
-    const drawer = ref(true);
-    const permanent = ref(true);
+    const drawer = ref(window.innerWidth >= 960);
+    const isPermanent = computed(() => window.innerWidth >= 960);
+
     const router = useRouter();
 
     const items = [
@@ -71,7 +74,9 @@ export default {
     ];
 
     const navigate = (route) => {
-      drawer.value = permanent.value;
+      if (!isPermanent.value) {
+        drawer.value = false;
+      }
       router.push(route);
     };
 
@@ -80,18 +85,41 @@ export default {
       router.push("/login");
     };
 
+    const toggleDrawer = () => {
+      drawer.value = !drawer.value;
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth >= 960) {
+        drawer.value = true;
+      } else {
+        drawer.value = false;
+      }
+
+      window.location.reload();
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", handleResize);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("resize", handleResize);
+    });
+
     return {
       drawer,
-      permanent,
+      isPermanent,
       items,
       navigate,
       logout,
+      toggleDrawer,
     };
   },
 };
 </script>
 
-<style>
+<style scoped>
 .custom-background {
   background: linear-gradient(to bottom, #038c7f, #038c7f, #1c1c1c) !important;
 }

@@ -14,9 +14,8 @@ const chart = ref(null);
 onMounted(() => {
   const myChart = echarts.init(chart.value);
 
-  // Dados para 4 semanas
   const weeks = ["Semana 1", "Semana 2", "Semana 3", "Semana 4"];
-  const registrations = [0, 0, 0, 6]; // Dados: 0 cadastros na semana 1, 2 e 3, e 6 cadastros na semana 4
+  const registrations = [0, 0, 0, 6];
 
   const option = {
     tooltip: {
@@ -62,8 +61,8 @@ onMounted(() => {
 .chart-container {
   border: 2px solid #d9d9d9;
   border-radius: 8px;
-  padding: 16px;
-  margin: 8px;
+  padding: 5px;
+  margin: 4px;
   background-color: #d9d9d9;
 }
 

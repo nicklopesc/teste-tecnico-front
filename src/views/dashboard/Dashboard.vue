@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <v-row>
-      <!-- Use v-col with appropriate props for responsiveness -->
       <v-col cols="12" md="6">
         <UserPieChart />
       </v-col>
@@ -35,11 +34,4 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Ensure proper spacing and layout for mobile devices */
-@media (max-width: 600px) {
-  .v-col {
-    margin-bottom: 16px; /* Adjust spacing as needed */
-  }
-}
-</style>
+<style scoped></style>

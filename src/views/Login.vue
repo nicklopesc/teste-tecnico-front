@@ -1,12 +1,12 @@
 <template>
   <v-container fluid fill-height class="login-container">
     <v-row justify="center" align="center">
-      <v-col cols="12" sm="10" md="8" lg="6">
+      <v-col cols="12" sm="12" md="8" lg="6">
         <div class="login-content">
           <span class="text-h5">Login</span>
-          <span class="subtext"
-            >Para acessar o sistema, insira usuário e senha!</span
-          >
+          <span class="subtext">
+            Para acessar o sistema, insira usuário e senha!
+          </span>
 
           <v-form @submit.prevent="handleLogin">
             <v-text-field
@@ -21,20 +21,20 @@
 
             <v-text-field
               v-model="password"
-              :append-inner-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="visible ? 'text' : 'password'"
+              :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="showPassword ? 'text' : 'password'"
               required
               density="compact"
               placeholder="Senha"
               variant="outlined"
-              @click:append-inner="visible = !visible"
+              @click:append-inner="showPassword = !showPassword"
               class="login-input"
               :rules="[rules.required]"
             ></v-text-field>
 
             <v-btn
               type="submit"
-              color="#1E88E5"
+              color="#038c7f"
               class="login-btn"
               :loading="loading"
             >
@@ -52,7 +52,6 @@ import { ref } from "vue";
 
 export default {
   name: "Login",
-  visible: false,
   setup() {
     const username = ref("");
     const password = ref("");
@@ -112,14 +111,15 @@ export default {
 
 .login-content {
   padding: 24px;
+  max-width: 450px;
   width: 100%;
-  max-width: 400px;
   box-sizing: border-box;
   text-align: center;
   background: rgba(0, 0, 0, 0.8);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.6s ease-out;
+  margin: 0 auto;
 }
 
 .text-h5 {
@@ -138,9 +138,6 @@ export default {
 .login-input {
   margin-bottom: 10px;
   width: 100%;
-}
-
-.login-input {
   color: #ffffff;
   border-radius: 4px;
 }

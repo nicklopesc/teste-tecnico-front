@@ -1,40 +1,55 @@
 <template>
-  <v-dialog v-model="dialogVisible" max-width="500">
-    <v-card>
-      <v-toolbar flat color="#038c7f">
-        <v-toolbar-title class="white--text">Editar Usuário</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon @click="closeDialog">
-          <v-icon class="white--text">mdi-close</v-icon>
-        </v-btn>
-      </v-toolbar>
+  <div>
+    <v-dialog v-model="dialogVisible" max-width="500">
+      <v-card>
+        <v-toolbar flat color="#038c7f">
+          <v-toolbar-title class="white--text">Editar Usuário</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="closeDialog">
+            <v-icon class="white--text">mdi-close</v-icon>
+          </v-btn>
+        </v-toolbar>
 
-      <v-card-subtitle>
-        <v-text-field
-          v-model="localUser.first_name"
-          label="Nome"
-        ></v-text-field>
-        <v-text-field
-          v-model="localUser.last_name"
-          label="Sobrenome"
-        ></v-text-field>
-        <v-text-field v-model="localUser.email" label="Email"></v-text-field>
-      </v-card-subtitle>
+        <v-card-subtitle>
+          <v-text-field
+            v-model="localUser.first_name"
+            label="Nome"
+          ></v-text-field>
+          <v-text-field
+            v-model="localUser.last_name"
+            label="Sobrenome"
+          ></v-text-field>
+          <v-text-field v-model="localUser.email" label="Email"></v-text-field>
+        </v-card-subtitle>
 
-      <div class="d-flex justify-end mb-3">
-        <Buttons
-          @cancel="closeDialog"
-          @confirm="saveUser"
-          buttonType="submit"
-        />
-      </div>
-    </v-card>
-  </v-dialog>
+        <div class="d-flex justify-end mb-3">
+          <Buttons
+            @cancel="closeDialog"
+            @confirm="saveUser"
+            buttonType="submit"
+          />
+        </div>
+      </v-card>
+    </v-dialog>
+
+    <!-- Snackbar for Alerts -->
+    <v-snackbar
+      v-model="showAlert"
+      :color="alertType === 'success' ? 'green' : 'red'"
+      timeout="3000"
+      top
+      right
+      class="snackbar"
+    >
+      {{ alertMessage }}
+    </v-snackbar>
+  </div>
 </template>
 
 <script>
-import { ref, watch, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import Buttons from "../../../components/Buttons.vue";
+
 export default {
   name: "EditUserDialog",
   components: {
@@ -65,9 +80,21 @@ export default {
     const showAlert = ref(false);
     const alertType = ref("success");
     const alertMessage = ref("");
-    const alertTimeout = 60000;
 
     const saveUser = async () => {
+      // Check if only email was changed
+      const emailChanged = localUser.value.email !== props.user.email;
+      const otherDataChanged =
+        localUser.value.first_name !== props.user.first_name ||
+        localUser.value.last_name !== props.user.last_name;
+
+      if (emailChanged && !otherDataChanged) {
+        showAlert.value = true;
+        alertType.value = "error";
+        alertMessage.value = "Não é permitido alterar o e-mail do usuário.";
+        return;
+      }
+
       try {
         const response = await fetch(
           `https://reqres.in/api/users/${localUser.value.id}`,
@@ -120,10 +147,16 @@ export default {
       showAlert,
       alertType,
       alertMessage,
-      alertTimeout,
     };
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.snackbar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+</style>

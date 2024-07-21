@@ -40,23 +40,23 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <Alert :message="alertMessage" :color="alertColor" />
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import Buttons from "../../../components/Buttons.vue";
-import ActionAlert from "../../../components/ActionAlert.vue";
+import Alert from "../../../components/Alert.vue";
 
 const dialogVisible = ref(false);
 const newUser = ref({
   name: "",
   job: "",
 });
-const alertVisible = ref(false);
-const alertSeverity = ref("success");
 const alertMessage = ref("");
-const alertErrorDetails = ref("");
+const alertColor = ref("success");
 
 const openDialog = () => {
   dialogVisible.value = true;
@@ -80,25 +80,19 @@ const createUser = async () => {
     if (response.ok) {
       const data = await response.json();
       console.log("Usuário criado:", data);
-      alertSeverity.value = "success";
       alertMessage.value = "Usuário criado com sucesso!";
-      alertErrorDetails.value = ""; // Pode ser deixado em branco
-      dialogVisible.value = false;
-      clearForm();
+      alertColor.value = "success";
     } else {
-      const errorData = await response.json();
-      alertSeverity.value = "error";
-      alertMessage.value = "Falha ao criar usuário.";
-      alertErrorDetails.value =
-        errorData.error || "Detalhes do erro não disponíveis.";
+      alertMessage.value = "Falha ao criar o usuário.";
+      alertColor.value = "error";
     }
   } catch (error) {
-    alertSeverity.value = "error";
-    alertMessage.value = "Erro ao criar usuário.";
-    alertErrorDetails.value = error.message;
     console.error("Error:", error);
+    alertMessage.value = "Erro ao criar o usuário.";
+    alertColor.value = "error";
   } finally {
-    alertVisible.value = true;
+    dialogVisible.value = false;
+    clearForm();
   }
 };
 
