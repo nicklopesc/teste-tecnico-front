@@ -11,9 +11,8 @@
         </v-toolbar>
         <v-card-subtitle class="my-6">
           <span class="text-subtitle-1 mr-2">
-            Você tem certeza de que deseja excluir</span
-          >
-
+            Você tem certeza de que deseja excluir
+          </span>
           <span class="text-subtitle-1 font-weight-bold">
             {{ localUser.first_name }} {{ localUser.last_name }}
           </span>
@@ -30,7 +29,6 @@
       </v-card>
     </v-dialog>
 
-    <!-- Snackbar for Alerts -->
     <v-snackbar
       v-model="showAlert"
       :color="alertType === 'success' ? 'green' : 'red'"
@@ -46,6 +44,7 @@
 
 <script>
 import { ref, watch, computed } from "vue";
+import { useStore } from "vuex";
 import Buttons from "../../../components/Buttons.vue";
 
 export default {
@@ -63,6 +62,7 @@ export default {
   },
   emits: ["update:show", "save"],
   setup(props, { emit }) {
+    const store = useStore();
     const localUser = ref({ ...props.user });
     const deleteDialogVisible = computed(() => props.show);
 
@@ -79,27 +79,12 @@ export default {
 
     const deleteUser = async () => {
       try {
-        const response = await fetch(
-          `https://reqres.in/api/users/${localUser.value.id}`,
-          {
-            method: "DELETE",
-          }
-        );
-
-        if (response.ok) {
-          console.log("User deleted successfully");
-          emit("save");
-          emit("update:show", false);
-          showAlert.value = true;
-          alertType.value = "success";
-          alertMessage.value = "Usuário excluído com sucesso!";
-        } else {
-          console.error("Failed to delete user:", response.statusText);
-          showAlert.value = true;
-          alertType.value = "error";
-          alertMessage.value =
-            "Falha ao excluir o usuário, por favor tente mais tarde.";
-        }
+        await store.dispatch("deleteUser", localUser.value.id);
+        emit("save");
+        emit("update:show", false);
+        showAlert.value = true;
+        alertType.value = "success";
+        alertMessage.value = "Usuário excluído com sucesso!";
       } catch (error) {
         console.error("Error:", error);
         showAlert.value = true;
