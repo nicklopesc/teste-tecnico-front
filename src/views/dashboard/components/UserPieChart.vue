@@ -1,6 +1,6 @@
 <template>
   <div class="chart-container">
-    <h3 class="chart-title">Distribuição de Usuários - Pizza</h3>
+    <h3 class="chart-title">Distribuição de Usuários</h3>
     <div ref="chart" class="chart"></div>
   </div>
 </template>
@@ -61,8 +61,8 @@ onMounted(() => {
 .chart-container {
   border: 2px solid #d9d9d9;
   border-radius: 8px;
-  padding: 16px;
-  margin: 8px;
+  padding: 5px;
+  margin: 4px;
   background-color: #d9d9d9;
 }
 
