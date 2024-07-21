@@ -11,24 +11,26 @@
             Adicionar Novo Usuário
           </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn icon @click="dialogVisible = false">
+          <v-btn icon @click="closeDialog">
             <v-icon class="white--text">mdi-close</v-icon>
           </v-btn>
         </v-toolbar>
 
         <v-card-text>
-          <v-form @submit.prevent="createUser">
+          <v-form @submit.prevent="createUser" ref="form">
             <v-text-field
               v-model="newUser.name"
               label="Nome"
               required
               variant="outlined"
+              :error-messages="errors.name"
             ></v-text-field>
             <v-text-field
               v-model="newUser.job"
               label="Cargo"
               required
               variant="outlined"
+              :error-messages="errors.job"
             ></v-text-field>
             <Buttons
               @cancel="cancel"
@@ -47,8 +49,11 @@
 
 <script setup>
 import { ref } from "vue";
+import { useStore } from "vuex";
 import Buttons from "../../../components/Buttons.vue";
 import Alert from "../../../components/Alert.vue";
+
+const store = useStore();
 
 const dialogVisible = ref(false);
 const newUser = ref({
@@ -57,42 +62,45 @@ const newUser = ref({
 });
 const alertMessage = ref("");
 const alertColor = ref("success");
+const errors = ref({ name: [], job: [] });
 
 const openDialog = () => {
   dialogVisible.value = true;
 };
 
-const cancel = () => {
+const closeDialog = () => {
   dialogVisible.value = false;
   clearForm();
 };
 
-const createUser = async () => {
-  try {
-    const response = await fetch("https://reqres.in/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newUser.value),
-    });
+const cancel = () => {
+  closeDialog();
+};
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log("Usuário criado:", data);
-      alertMessage.value = "Usuário criado com sucesso!";
-      alertColor.value = "success";
-    } else {
-      alertMessage.value = "Falha ao criar o usuário.";
-      alertColor.value = "error";
-    }
+const createUser = async () => {
+  errors.value = { name: [], job: [] };
+
+  let valid = true;
+  if (!newUser.value.name) {
+    errors.value.name.push("Nome é obrigatório.");
+    valid = false;
+  }
+  if (!newUser.value.job) {
+    errors.value.job.push("Cargo é obrigatório.");
+    valid = false;
+  }
+  if (!valid) return;
+
+  try {
+    await store.dispatch("createUser", newUser.value);
+    alertMessage.value = "Usuário criado com sucesso!";
+    alertColor.value = "success";
   } catch (error) {
     console.error("Error:", error);
     alertMessage.value = "Erro ao criar o usuário.";
     alertColor.value = "error";
   } finally {
-    dialogVisible.value = false;
-    clearForm();
+    closeDialog();
   }
 };
 
