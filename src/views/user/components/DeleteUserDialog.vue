@@ -19,11 +19,6 @@
           </span>
           ?
         </v-card-subtitle>
-        <!-- <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn @click="deleteUser">Excluir</v-btn>
-          <v-btn @click="closeDeleteDialog">Cancelar</v-btn>
-        </v-card-actions> -->
         <div class="d-flex justify-end mb-3">
           <Buttons
             @cancel="closeDeleteDialog"
@@ -34,6 +29,18 @@
         </div>
       </v-card>
     </v-dialog>
+
+    <!-- Snackbar for Alerts -->
+    <v-snackbar
+      v-model="showAlert"
+      :color="alertType === 'success' ? 'green' : 'red'"
+      timeout="3000"
+      top
+      right
+      class="snackbar"
+    >
+      {{ alertMessage }}
+    </v-snackbar>
   </div>
 </template>
 
@@ -69,7 +76,6 @@ export default {
     const showAlert = ref(false);
     const alertType = ref("success");
     const alertMessage = ref("");
-    const alertTimeout = 0;
 
     const deleteUser = async () => {
       try {
@@ -115,7 +121,6 @@ export default {
       showAlert,
       alertType,
       alertMessage,
-      alertTimeout,
     };
   },
 };
@@ -124,5 +129,11 @@ export default {
 <style scoped>
 .font-weight-bold {
   font-weight: bold;
+}
+.snackbar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
 }
 </style>
