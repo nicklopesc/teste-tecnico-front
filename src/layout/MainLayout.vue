@@ -1,11 +1,10 @@
 <template>
   <v-app>
-    <!-- Navigation Drawer -->
     <v-navigation-drawer
       app
       v-model="drawer"
       :permanent="isPermanent"
-      :temporary="isTemporary"
+      :temporary="!isPermanent"
       class="custom-background"
     >
       <v-list class="flex-column">
@@ -44,13 +43,11 @@
       </v-list>
     </v-navigation-drawer>
 
-    <!-- App Bar with Menu Button -->
     <v-app-bar app color="#038c7f">
       <v-app-bar-nav-icon @click="toggleDrawer" />
       <v-toolbar-title class="toolbar-title">Olá, User!</v-toolbar-title>
     </v-app-bar>
 
-    <!-- Main Content -->
     <v-main>
       <v-container fluid>
         <router-view />
@@ -60,15 +57,14 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
   name: "MainLayout",
   setup() {
-    const drawer = ref(true);
-    const isPermanent = computed(() => window.innerWidth >= 960); // Permanent on large screens
-    const isTemporary = computed(() => window.innerWidth < 960); // Temporary on small screens
+    const drawer = ref(window.innerWidth >= 960);
+    const isPermanent = computed(() => window.innerWidth >= 960);
 
     const router = useRouter();
 
@@ -78,7 +74,9 @@ export default {
     ];
 
     const navigate = (route) => {
-      drawer.value = false; // Close drawer on item click (mobile)
+      if (!isPermanent.value) {
+        drawer.value = false;
+      }
       router.push(route);
     };
 
@@ -88,20 +86,30 @@ export default {
     };
 
     const toggleDrawer = () => {
-      drawer.value = !drawer.value; // Toggle drawer visibility
+      drawer.value = !drawer.value;
     };
 
-    // Watch for window resize events
-    window.addEventListener("resize", () => {
+    const handleResize = () => {
       if (window.innerWidth >= 960) {
-        drawer.value = true; // Show drawer on large screens
+        drawer.value = true;
+      } else {
+        drawer.value = false;
       }
+
+      window.location.reload();
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", handleResize);
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("resize", handleResize);
     });
 
     return {
       drawer,
       isPermanent,
-      isTemporary,
       items,
       navigate,
       logout,

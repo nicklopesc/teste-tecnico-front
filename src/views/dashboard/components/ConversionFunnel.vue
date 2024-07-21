@@ -15,7 +15,7 @@ onMounted(() => {
   const myChart = echarts.init(chart.value);
 
   const categories = ["Acessos ao Site", "Registros Completos"];
-  const values = [8, 6]; // 8 acessos ao site e 6 registros completos
+  const values = [8, 6];
 
   const option = {
     tooltip: {
