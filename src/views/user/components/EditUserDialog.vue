@@ -82,6 +82,19 @@ export default {
     const alertMessage = ref("");
 
     const saveUser = async () => {
+      // Check if only email was changed
+      const emailChanged = localUser.value.email !== props.user.email;
+      const otherDataChanged =
+        localUser.value.first_name !== props.user.first_name ||
+        localUser.value.last_name !== props.user.last_name;
+
+      if (emailChanged && !otherDataChanged) {
+        showAlert.value = true;
+        alertType.value = "error";
+        alertMessage.value = "Não é permitido alterar o e-mail do usuário.";
+        return;
+      }
+
       try {
         const response = await fetch(
           `https://reqres.in/api/users/${localUser.value.id}`,
