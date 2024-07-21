@@ -9,7 +9,7 @@
     >
       <v-list class="flex-column">
         <div class="logo">
-          <span class="text-h3">User</span>
+          <span class="text-h3">LOGO</span>
         </div>
 
         <v-divider></v-divider>
