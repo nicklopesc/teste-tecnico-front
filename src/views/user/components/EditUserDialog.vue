@@ -17,7 +17,7 @@
           ></v-text-field>
           <v-text-field
             v-model="localUser.last_name"
-            label="Sobrenome"
+            label="Sobrenome / Cargo"
           ></v-text-field>
           <v-text-field v-model="localUser.email" label="Email"></v-text-field>
         </v-card-subtitle>
@@ -32,7 +32,6 @@
       </v-card>
     </v-dialog>
 
-    <!-- Snackbar for Alerts -->
     <v-snackbar
       v-model="showAlert"
       :color="alertType === 'success' ? 'green' : 'red'"
@@ -47,7 +46,8 @@
 </template>
 
 <script>
-import { ref, computed, watch } from "vue";
+import { computed, watch, ref } from "vue";
+import { useStore } from "vuex";
 import Buttons from "../../../components/Buttons.vue";
 
 export default {
@@ -67,8 +67,16 @@ export default {
   },
   emits: ["update:show", "save"],
   setup(props, { emit }) {
+    const store = useStore();
     const localUser = ref({ ...props.user });
-    const dialogVisible = computed(() => props.show);
+    const dialogVisible = computed({
+      get() {
+        return props.show;
+      },
+      set(value) {
+        emit("update:show", value);
+      },
+    });
 
     watch(
       () => props.user,
@@ -82,7 +90,6 @@ export default {
     const alertMessage = ref("");
 
     const saveUser = async () => {
-      // Check if only email was changed
       const emailChanged = localUser.value.email !== props.user.email;
       const otherDataChanged =
         localUser.value.first_name !== props.user.first_name ||
@@ -96,36 +103,19 @@ export default {
       }
 
       try {
-        const response = await fetch(
-          `https://reqres.in/api/users/${localUser.value.id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              first_name: localUser.value.first_name,
-              last_name: localUser.value.last_name,
-              email: localUser.value.email,
-            }),
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log("User updated successfully:", data);
-          emit("save", data);
-          emit("update:show", false);
-          showAlert.value = true;
-          alertType.value = "success";
-          alertMessage.value = "Usuário atualizado com sucesso!";
-        } else {
-          console.error("Failed to update user:", response.statusText);
-          showAlert.value = true;
-          alertType.value = "error";
-          alertMessage.value =
-            "Falha ao atualizar o usuário, por favor tente mais tarde.";
-        }
+        const updatedUser = await store.dispatch("updateUser", {
+          id: localUser.value.id,
+          userData: {
+            name: localUser.value.first_name,
+            job: localUser.value.last_name,
+          },
+        });
+        console.log("User updated successfully:", updatedUser);
+        emit("save", updatedUser);
+        emit("update:show", false);
+        showAlert.value = true;
+        alertType.value = "success";
+        alertMessage.value = "Usuário atualizado com sucesso!";
       } catch (error) {
         console.error("Error:", error);
         showAlert.value = true;
