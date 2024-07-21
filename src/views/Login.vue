@@ -34,7 +34,7 @@
 
             <v-btn
               type="submit"
-              color="#1E88E5"
+              color="#038c7f"
               class="login-btn"
               :loading="loading"
             >
@@ -111,6 +111,7 @@ export default {
 
 .login-content {
   padding: 24px;
+  max-width: 450px;
   width: 100%;
   box-sizing: border-box;
   text-align: center;
@@ -118,6 +119,7 @@ export default {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.6s ease-out;
+  margin: 0 auto;
 }
 
 .text-h5 {
